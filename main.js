@@ -4,6 +4,7 @@ const holder = document.getElementById('operation');
 
 const operators = ['−', '+', '×', '÷']
 
+
 // All buttons
 
 let activated = true;
@@ -34,10 +35,11 @@ window.addEventListener('keypress', (e) => {
 })
 
 const convertOperator = (operator) => {
-    if (operator === '+') return '+'
+    /* if (operator === '+') return '+'
     else if (operator === '-') return '−'
     else if (operator === '*') return '×'
-    else if (operator === '/') return '÷'
+    else if (operator === '/') return '÷' */
+    return operators.find((o) => o === operator.replace('-', '−').replace('*', '×').replace('/', '÷'))
 }
 
 const clear = () => {
@@ -75,13 +77,16 @@ const getNumbers = (str, num2) => {
     for (let i = 0; i < str.length - 1; i++) num1 += str[i]; // loop and finish right before an operator
     num1 = parseInt(num1);
     num2 = parseInt(num2);
-    return [num1, str[str.length-1], num2]
+    return [num1, str[str.length - 1], num2]
 }
 
 const addOperator = (local, value) => {
-    let hasOperator = operators.some((o) => local.textContent.includes(o))
+    let hasOperator = hasOperatorfunc(local.textContent);
     if (!hasOperator) local.textContent += value;
     else {
+        if (hasOperatorfunc(holder.textContent.slice(0, holder.textContent.length - 1))) {
+            return;
+        }
         local.textContent = local.textContent.replace(local.textContent[local.textContent.length - 1], value);
     }
 }
@@ -97,6 +102,8 @@ const doOperation = (num1, operation, num2) => {
     }
     return res;
 }
+
+const hasOperatorfunc = (str) => operators.some((o) => str.includes(o))
 
 // Operations
 const add = (x, y) => x + y
